@@ -3,6 +3,7 @@ package net.mcatlas.warweekend;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.exceptions.NotRegisteredException;
 import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownBlock;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -69,6 +70,71 @@ public class WarManager {
         }
 
         return warPlayers;
+    }
+
+    public Set<WarPlayer> getWarPlayersOpposingPlayer(Player player) {
+        Set<WarPlayer> warPlayers = new HashSet<>();
+
+        WarTeam team = getTeam(player);
+        if (team == null) return warPlayers;
+        for (WarTeam otherTeam : WarTeam.values()) {
+            if (otherTeam == team) continue;
+            warPlayers.addAll(getTeamMembers(otherTeam));
+        }
+
+        return warPlayers;
+    }
+
+    public Set<WarPlayer> getOpposingPlayersInTown(Player player) {
+        Set<WarPlayer> warPlayers = new HashSet<>();
+
+        TownBlock playerBlock = TownyAPI.getInstance().getTownBlock(player.getLocation());
+        if (playerBlock == null) return warPlayers;
+
+        for (WarPlayer warPlayer : getWarPlayersOpposingPlayer(player)) {
+            TownBlock block = TownyAPI.getInstance().getTownBlock(warPlayer.getPlayer().getLocation());
+            if (block == null) continue;
+            try {
+                Town town = block.getTown();
+                Town town2 = playerBlock.getTown();
+                if (town.equals(town2)) {
+                    warPlayers.add(warPlayer);
+                    continue;
+                }
+            } catch (NotRegisteredException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return warPlayers;
+    }
+
+    // get closest member of the opposing team to the player who is within the town
+    public Player getClosestOpposerInTown(Player player) {
+        Player farthest = null;
+
+        for (WarPlayer warPlayer : getOpposingPlayersInTown(player)) {
+            Player opposer = warPlayer.getPlayer();
+            if (farthest == null || farthest.getLocation().distance(player.getLocation()) > opposer.getLocation().distance(player.getLocation())) {
+                farthest = opposer;
+            }
+        }
+
+        return farthest;
+    }
+
+    // get farthest member of the opposing team to the player who is within the town
+    public Player getFarthestOpposerInTown(Player player) {
+        Player farthest = null;
+
+        for (WarPlayer warPlayer : getOpposingPlayersInTown(player)) {
+            Player opposer = warPlayer.getPlayer();
+            if (farthest == null || farthest.getLocation().distance(player.getLocation()) < opposer.getLocation().distance(player.getLocation())) {
+                farthest = opposer;
+            }
+        }
+
+        return farthest;
     }
 
     public void joinTeam(Player player, WarTeam warTeam) {
