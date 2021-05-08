@@ -39,8 +39,13 @@ public class PVPListener implements Listener {
                 return;
             }
 
-            double damage = warWeekendPlugin.getWarManager().getCaptureBoost(warWeekendPlugin.getWarManager().getTeam(damager))
-                    * event.getDamage();
+            double boost = warWeekendPlugin.getWarManager().getCaptureBoost(warWeekendPlugin.getWarManager().getTeam(damager));
+
+            if (boost > 1.0) {
+                boost = boost / 2;
+            }
+
+            double damage = boost * event.getDamage();
             event.setDamage(damage);
             event.setCancelled(false);
             return;

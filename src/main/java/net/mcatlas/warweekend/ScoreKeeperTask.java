@@ -101,6 +101,12 @@ public class ScoreKeeperTask implements Runnable, Listener, CommandExecutor {
             sender.sendMessage(warTeam.getColor() + warTeam.getStylizedName() + ChatColor.YELLOW + " have " + scoreCache.get(warTeam) + " towns captured.");
         }
         sender.sendMessage(ChatColor.YELLOW + "There are a total of " + TownyAPI.getInstance().getDataSource().getTowns().size() + " towns on the server.");
+        sender.sendMessage("");
+        for (WarTeam warTeam : WarTeam.values()) {
+            int currentMembers = warWeekendPlugin.getWarManager().getTeamMembers(warTeam).size();
+            sender.sendMessage(warTeam.getColor() + warTeam.getStylizedName() + ChatColor.YELLOW + " members online: " + currentMembers);
+        }
+
         sender.sendMessage(ChatColor.LIGHT_PURPLE + "==== WAR STATS ====");
         return true;
     }
