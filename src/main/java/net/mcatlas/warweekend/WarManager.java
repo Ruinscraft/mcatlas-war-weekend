@@ -151,6 +151,15 @@ public class WarManager {
         return warTowns.get(town);
     }
 
+    public WarTown getWarTown(String name) {
+        for (WarTown warTown : warTowns.values()) {
+            if (warTown.getTown().getName().equals(name)) {
+                return warTown;
+            }
+        }
+        return null;
+    }
+
     public void addWarTown(WarTown warTown) {
         warTowns.put(warTown.getTown(), warTown);
     }
