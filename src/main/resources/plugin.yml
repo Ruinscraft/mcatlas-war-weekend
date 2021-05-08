@@ -1,0 +1,11 @@
+name: ${name}
+version: ${project.version}
+main: ${mainClass}
+depend: [Towny]
+author: royalkingkb
+api-version: 1.13
+commands:
+  joinwar:
+    description: JOIN THE WAR!
+  warstats:
+    description: View stats of the on going war
