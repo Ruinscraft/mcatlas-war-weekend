@@ -28,6 +28,10 @@ public class ScoreKeeperTask implements Runnable, Listener, CommandExecutor {
         bossBar = warWeekendPlugin.getServer().createBossBar("", BarColor.WHITE, BarStyle.SOLID);
     }
 
+    public Map<WarTeam, Integer> getScoreCache() {
+        return scoreCache;
+    }
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         bossBar.addPlayer(event.getPlayer());

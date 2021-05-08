@@ -68,7 +68,7 @@ public class WarTask implements Runnable {
             WarTeam currentController = warTown.calculateCurrentController();
 
             if (previousController != currentController) {
-                warTown.decrementScore(warWeekendPlugin.getWarManager().getCaptureBoost(currentController));
+                warTown.decrementScore(warWeekendPlugin.getWarManager().getCaptureBoost(currentController, warWeekendPlugin));
 
                 if (warTown.getCaptureScore() <= 1) {
                     warTown.resetScore();
@@ -76,7 +76,7 @@ public class WarTask implements Runnable {
                     Bukkit.broadcastMessage(currentController.getColor() + currentController.getStylizedName() + ChatColor.YELLOW + " have CAPTURED " + warTown.getTown().getName() + "!");
                     warWeekendPlugin.getMySQLWarStorage().saveCapture(warTown.getTown().getName(), currentController.name());
                 } else {
-                    Bukkit.broadcastMessage(currentController.getColor() + currentController.getStylizedName() + ChatColor.YELLOW + " are capturing " + warTown.getTown().getName() + " (" + warTown.getCaptureScore() + ").");
+                    Bukkit.broadcastMessage(currentController.getColor() + currentController.getStylizedName() + ChatColor.YELLOW + " are capturing " + warTown.getTown().getName() + " (" + warTown.getCaptureScoreFormatted() + ").");
                 }
             } else {
                 warTown.resetScore();

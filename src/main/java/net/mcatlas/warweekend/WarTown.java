@@ -67,6 +67,11 @@ public class WarTown {
         return captureScore;
     }
 
+    public String getCaptureScoreFormatted() {
+        String formatted = String.format("%.2f", captureScore);
+        return formatted;
+    }
+
     public void decrementScore(double multipler) {
         captureScore = captureScore - (1 * multipler);
     }

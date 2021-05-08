@@ -22,6 +22,10 @@ public class WarWeekendPlugin extends JavaPlugin {
         return warManager;
     }
 
+    public ScoreKeeperTask getScoreKeeperTask() {
+        return scoreKeeperTask;
+    }
+
     public ChooseTeamGUI getChooseTeamGUI() {
         return chooseTeamGUI;
     }

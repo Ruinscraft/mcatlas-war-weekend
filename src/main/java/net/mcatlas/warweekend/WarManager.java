@@ -25,7 +25,7 @@ public class WarManager {
         return participants.values();
     }
 
-    public int getCaptureBoost(WarTeam warTeam) {
+    public double getCaptureBoost(WarTeam warTeam, WarWeekendPlugin warWeekendPlugin) {
         Map<WarTeam, Integer> memberCounts = new HashMap<>();
 
         for (WarPlayer warPlayer : participants.values()) {
@@ -45,7 +45,17 @@ public class WarManager {
             }
         }
 
-        return mostMemberCount / memberCounts.get(warTeam);
+        int teamScore = warWeekendPlugin.getScoreKeeperTask().getScoreCache().get(warTeam);
+        int highestScore = 0;
+
+        for (WarTeam _warTeam : warWeekendPlugin.getScoreKeeperTask().getScoreCache().keySet()) {
+            if (warWeekendPlugin.getScoreKeeperTask().getScoreCache().get(_warTeam) > highestScore) {
+                highestScore = warWeekendPlugin.getScoreKeeperTask().getScoreCache().get(_warTeam);
+            }
+        }
+
+        double scoreBoost = highestScore / (double) teamScore;
+        return (mostMemberCount / (double) memberCounts.get(warTeam)) * scoreBoost;
     }
 
     public Set<WarPlayer> getTeamMembers(WarTeam warTeam) {

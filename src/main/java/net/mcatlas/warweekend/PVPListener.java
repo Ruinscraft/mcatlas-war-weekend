@@ -1,6 +1,7 @@
 package net.mcatlas.warweekend;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,7 +19,18 @@ public class PVPListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPVP(EntityDamageByEntityEvent event) {
-        if (!(event.getDamager() instanceof Player)) {
+        Player damager = null;
+
+        if (event.getDamager() instanceof Arrow) {
+            Arrow arrow = (Arrow) event.getDamager();
+            damager = (Player) arrow.getShooter();
+        }
+
+        if (event.getDamager() instanceof Player) {
+            damager = (Player) event.getDamager();
+        }
+
+        if (damager == null) {
             return;
         }
 
@@ -26,7 +38,6 @@ public class PVPListener implements Listener {
             return;
         }
 
-        Player damager = (Player) event.getDamager();
         Player damaged = (Player) event.getEntity();
 
         boolean damagerInWar = warWeekendPlugin.getWarManager().getTeam(damager) != null;
@@ -39,7 +50,7 @@ public class PVPListener implements Listener {
                 return;
             }
 
-            double boost = warWeekendPlugin.getWarManager().getCaptureBoost(warWeekendPlugin.getWarManager().getTeam(damager));
+            double boost = warWeekendPlugin.getWarManager().getCaptureBoost(warWeekendPlugin.getWarManager().getTeam(damager), warWeekendPlugin);
 
             if (boost > 1.0) {
                 boost = boost / 2;

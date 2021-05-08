@@ -29,7 +29,7 @@ public class JoinWarCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (lastUsed.containsKey(player)) {
-            if (lastUsed.get(player) + TimeUnit.MINUTES.toMillis(1) > System.currentTimeMillis()) {
+            if (lastUsed.get(player) + TimeUnit.MINUTES.toMillis(10) > System.currentTimeMillis()) {
                 player.sendMessage(ChatColor.RED + "You must wait to use this command again.");
                 return false;
             }
