@@ -2,6 +2,7 @@ name: ${name}
 version: ${project.version}
 main: ${mainClass}
 depend: [Towny]
+loadbefore: [Dynmap-Towny, dynmap]
 author: royalkingkb
 api-version: 1.13
 commands:

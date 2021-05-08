@@ -23,7 +23,9 @@ public class PVPListener implements Listener {
 
         if (event.getDamager() instanceof Arrow) {
             Arrow arrow = (Arrow) event.getDamager();
-            damager = (Player) arrow.getShooter();
+            if (arrow.getShooter() instanceof Player) {
+                damager = (Player) arrow.getShooter();
+            }
         }
 
         if (event.getDamager() instanceof Player) {
@@ -76,7 +78,15 @@ public class PVPListener implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
+        if (event.getEntity() == null) {
+            return;
+        }
+
         Player killer = event.getEntity().getKiller();
+
+        if (killer == null) {
+            return;
+        }
 
         if (warWeekendPlugin.getWarManager().getTeam(killer) != null) {
             warWeekendPlugin.getMySQLWarStorage().incrementKillCount(warWeekendPlugin.getWarManager().getTeam(killer).name());

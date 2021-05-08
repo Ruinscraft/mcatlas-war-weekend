@@ -58,7 +58,7 @@ public class WarWeekendPlugin extends JavaPlugin {
         mySQLWarStorage.createTables();
 
         warManager = new WarManager();
-        warManager.loadWarTownsFromStorage(this);
+        warManager.loadWarTownsFromStorage(this).join();
 
         warTask = new WarTask(this);
         getServer().getScheduler().runTaskTimer(this, warTask, 20L * 30L, 20L * 30L);

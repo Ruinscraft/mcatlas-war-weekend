@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WarManager {
@@ -113,10 +114,10 @@ public class WarManager {
         }
     }
 
-    public void loadWarTownsFromStorage(WarWeekendPlugin warWeekendPlugin) {
+    public CompletableFuture<Void> loadWarTownsFromStorage(WarWeekendPlugin warWeekendPlugin) {
         warWeekendPlugin.getLogger().info("Loading town captures from storage...");
 
-        warWeekendPlugin.getMySQLWarStorage().queryCaptures().thenAccept(storedCaptures -> {
+        return warWeekendPlugin.getMySQLWarStorage().queryCaptures().thenAccept(storedCaptures -> {
             for (MySQLWarStorage.StoredCapture storedCapture : storedCaptures) {
                 Town town;
                 try {
