@@ -68,13 +68,14 @@ public class WarTask implements Runnable {
             WarTeam currentController = warTown.calculateCurrentController();
 
             if (previousController != currentController) {
+                warTown.decrementScore(warWeekendPlugin.getWarManager().getCaptureBoost(currentController));
+
                 if (warTown.getCaptureScore() <= 1) {
                     warTown.resetScore();
                     warTown.setController(currentController);
                     Bukkit.broadcastMessage(currentController.getColor() + currentController.getStylizedName() + ChatColor.YELLOW + " have CAPTURED " + warTown.getTown().getName() + "!");
                     warWeekendPlugin.getMySQLWarStorage().saveCapture(warTown.getTown().getName(), currentController.name());
                 } else {
-                    warTown.decrementScore(warWeekendPlugin.getWarManager().getCaptureBoost(currentController));
                     Bukkit.broadcastMessage(currentController.getColor() + currentController.getStylizedName() + ChatColor.YELLOW + " are capturing " + warTown.getTown().getName() + " (" + warTown.getCaptureScore() + ").");
                 }
             } else {

@@ -21,7 +21,7 @@ public class ChooseTeamGUI implements Listener {
         inventory = warWeekendPlugin.getServer().createInventory(null, 9, "CHOOSE TEAM");
         inventory.setItem(0, createGuiItem(Material.MELON, "JOIN " + WarTeam.MELONS.getColor() + WarTeam.MELONS.getStylizedName()));
         inventory.setItem(1, createGuiItem(Material.PUMPKIN, "JOIN " + WarTeam.PUMPKINS.getColor() + WarTeam.PUMPKINS.getStylizedName()));
-        inventory.setItem(2, createGuiItem(Material.BARRIER, "SPECTATE (play as normal)"));
+        inventory.setItem(2, createGuiItem(Material.STONE, "SPECTATE (play as normal)"));
     }
 
     private ItemStack createGuiItem(final Material material, final String name, final String... lore) {

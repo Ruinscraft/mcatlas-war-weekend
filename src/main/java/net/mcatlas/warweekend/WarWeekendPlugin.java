@@ -1,5 +1,9 @@
 package net.mcatlas.warweekend;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class WarWeekendPlugin extends JavaPlugin {
@@ -61,6 +65,16 @@ public class WarWeekendPlugin extends JavaPlugin {
         getCommand("warstats").setExecutor(scoreKeeperTask);
 
         getServer().getScheduler().runTaskTimer(this, new ActionBarTask(this), 20L * 60L, 20L * 60L);
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
+            player.sendTitle(ChatColor.GOLD + "WEEKEND WAR", ChatColor.YELLOW + "MELONS VS PUMPKINS");
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "============ EMERGENCY ============");
+            player.sendMessage(ChatColor.YELLOW + "MELONS VS PUMPKINS WAR");
+            player.sendMessage(ChatColor.YELLOW + "JOIN IMMEDIATELY WITH /joinwar");
+            player.sendMessage(ChatColor.YELLOW + "PLEASE READ HERE: https://ruinscraft.com/threads/mcatlas-weekend-war.12590/");
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "============ EMERGENCY ============");
+        }
     }
 
     @Override
