@@ -12,19 +12,31 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 public class WarManager {
 
     private Map<Player, WarPlayer> participants;
     private Map<Town, WarTown> warTowns;
+    private Map<UUID, Long> recentlyJoinedTeam;
 
     public WarManager() {
         participants = new ConcurrentHashMap<>();
         warTowns = new ConcurrentHashMap<>();
+        recentlyJoinedTeam = new HashMap<>();
     }
 
     public Collection<WarPlayer> getParticipants() {
         return participants.values();
+    }
+
+    public void putCooldownJoinTeam(Player player) {
+        recentlyJoinedTeam.put(player.getUniqueId(), System.currentTimeMillis());
+    }
+
+    public boolean isCooldownJoinTeam(Player player) {
+        if (recentlyJoinedTeam.isEmpty() || !recentlyJoinedTeam.containsKey(player.getUniqueId())) return false;
+        return recentlyJoinedTeam.get(player.getUniqueId()) + TimeUnit.MINUTES.toMillis(10) > System.currentTimeMillis();
     }
 
     public double getCaptureBoost(WarTeam warTeam, WarWeekendPlugin warWeekendPlugin) {
@@ -137,7 +149,33 @@ public class WarManager {
         return farthest;
     }
 
+    public boolean isInSameTown(Player player, Player player2) {
+        TownBlock block1 = TownyAPI.getInstance().getTownBlock(player.getLocation());
+        if (block1 == null) return false;
+        TownBlock block2 = TownyAPI.getInstance().getTownBlock(player2.getLocation());
+        if (block2 == null) return false;
+        try {
+            if (block1.getTown() == block2.getTown()) return true;
+        } catch (NotRegisteredException e) {
+            return false;
+        }
+        return false;
+    }
+
+    public boolean onSameTeam(Player player, Player player2) {
+        return getTeam(player) == getTeam(player2) && getTeam(player) != null && getTeam(player2) != null;
+    }
+
     public void joinTeam(Player player, WarTeam warTeam) {
+        replaceHelmet(player, warTeam);
+
+        WarPlayer warPlayer = new WarPlayer(player, warTeam);
+        participants.put(player, warPlayer);
+
+        player.sendMessage(ChatColor.YELLOW + "You've joined: " + warTeam.getColor() + warTeam.getStylizedName());
+    }
+
+    public void replaceHelmet(Player player, WarTeam warTeam) {
         ItemStack helmet = player.getInventory().getHelmet();
 
         // put existing helmet in inventory (if it wasnt a team helmet)
@@ -161,11 +199,6 @@ public class WarManager {
         // put team helmet on
         ItemStack teamHelmet = new ItemStack(warTeam.getHat(), 1);
         player.getInventory().setHelmet(teamHelmet);
-
-        WarPlayer warPlayer = new WarPlayer(player, warTeam);
-        participants.put(player, warPlayer);
-
-        player.sendMessage(ChatColor.YELLOW + "You've joined: " + warTeam.getColor() + warTeam.getStylizedName());
     }
 
     public void leaveTeam(Player player) {

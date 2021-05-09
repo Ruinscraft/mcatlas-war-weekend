@@ -54,15 +54,18 @@ public class ChooseTeamGUI implements Listener {
         switch (event.getRawSlot()) {
             case 0: // MELON
                 warWeekendPlugin.getWarManager().joinTeam(player, WarTeam.MELONS);
+                warWeekendPlugin.getWarManager().putCooldownJoinTeam(player);
                 player.closeInventory();
                 return;
             case 1: // PUMPKIN
                 warWeekendPlugin.getWarManager().joinTeam(player, WarTeam.PUMPKINS);
+                warWeekendPlugin.getWarManager().putCooldownJoinTeam(player);
                 player.closeInventory();
                 return;
             case 2: // SPECTATE
                 player.closeInventory();
                 warWeekendPlugin.getWarManager().leaveTeam(player);
+                warWeekendPlugin.getWarManager().putCooldownJoinTeam(player);
             default:
                 return;
         }

@@ -46,6 +46,7 @@ public class WarWeekendPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(chooseTeamGUI, this);
         getServer().getPluginManager().registerEvents(new HelmetListener(this), this);
         getServer().getPluginManager().registerEvents(new PVPListener(this), this);
+        getServer().getPluginManager().registerEvents(new CustomItemListener(this), this);
 
         getCommand("joinwar").setExecutor(new JoinWarCommand(this));
 

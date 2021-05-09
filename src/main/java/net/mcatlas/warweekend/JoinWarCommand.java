@@ -14,11 +14,9 @@ import java.util.concurrent.TimeUnit;
 public class JoinWarCommand implements CommandExecutor {
 
     private WarWeekendPlugin warWeekendPlugin;
-    private Map<UUID, Long> lastUsed;
 
     public JoinWarCommand(WarWeekendPlugin warWeekendPlugin) {
         this.warWeekendPlugin = warWeekendPlugin;
-        lastUsed = new HashMap<>();
     }
 
     @Override
@@ -29,15 +27,12 @@ public class JoinWarCommand implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (lastUsed.containsKey(player.getUniqueId())) {
-            if (lastUsed.get(player.getUniqueId()) + TimeUnit.MINUTES.toMillis(10) > System.currentTimeMillis()) {
-                player.sendMessage(ChatColor.RED + "You must wait to use this command again.");
-                return false;
-            }
+        if (warWeekendPlugin.getWarManager().isCooldownJoinTeam(player)) {
+            player.sendMessage(ChatColor.RED + "You must wait to use this command again.");
+            return false;
         }
 
         warWeekendPlugin.getChooseTeamGUI().open(player);
-        lastUsed.put(player.getUniqueId(), System.currentTimeMillis());
 
         return true;
     }

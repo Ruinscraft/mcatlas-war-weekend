@@ -1,5 +1,6 @@
 package net.mcatlas.warweekend;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -8,6 +9,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class PVPListener implements Listener {
 
@@ -90,6 +92,15 @@ public class PVPListener implements Listener {
 
         if (warWeekendPlugin.getWarManager().getTeam(killer) != null) {
             warWeekendPlugin.getMySQLWarStorage().incrementKillCount(warWeekendPlugin.getWarManager().getTeam(killer).name());
+        }
+    }
+
+    @EventHandler
+    public void onRespawn(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
+
+        if (warWeekendPlugin.getWarManager().getTeam(player) != null) {
+            warWeekendPlugin.getWarManager().replaceHelmet(player, warWeekendPlugin.getWarManager().getTeam(player));
         }
     }
 

@@ -30,6 +30,11 @@ public class JoinQuitListener implements Listener {
                 player.sendMessage(ChatColor.YELLOW + "PLEASE READ HERE: https://ruinscraft.com/threads/mcatlas-weekend-war.12590/");
                 player.sendMessage(ChatColor.LIGHT_PURPLE + "============ EMERGENCY ============");
             }
+
+            if (warWeekendPlugin.getWarManager().isCooldownJoinTeam(player)) {
+                player.sendMessage(ChatColor.RED + "You're currently on cooldown for rejoining a different team.");
+                player.sendMessage(ChatColor.RED + "You won't be able to join a team until the 10 minute cooldown is over.");
+            }
         }, 100L);
     }
 
